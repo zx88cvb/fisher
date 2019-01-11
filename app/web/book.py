@@ -1,13 +1,12 @@
 from helper import is_isbn_or_key
 from yushu_book import YuShuBook
-from flask import make_response, jsonify
+from flask import jsonify, request
+from . import web
 
 __author__ = 'Angel'
 
-# 蓝图 blueprint
-
 # 路由 相当于Controller
-@app.route('/hello/')
+@web.route('/hello/')
 def hello():
     headers = {
         'content-type': 'text/plain', # 设置请求头
@@ -18,13 +17,15 @@ def hello():
     return '<html></html>', 200, headers
 
 
-@app.route('/book/search/<q>/<page>')
-def search(q, page):
+@web.route('/book/search')
+def search():
     """
     :param q: 普通关键字 isbn
     :param page: 
     :return: 
     """
+    q = request.args['q']
+    page = request.args['page']
 
     isbn_or_key = is_isbn_or_key(q)
     if isbn_or_key == 'isbn':
